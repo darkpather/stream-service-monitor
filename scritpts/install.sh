@@ -57,7 +57,7 @@ sudo cp services.php "$TARGET_DIR/"
 sudo cp login.php "$TARGET_DIR/"
 sudo cp register.php "$TARGET_DIR/"
 sudo cp config.php "$TARGET_DIR/"
-sudo cp fetch_services.py "$TARGET_DIR/cgi-bin/"
+sudo cp fetch_services.py "$TARGET_DIR"
 
 # Set permissions
 sudo chown -R www-data:www-data "$TARGET_DIR"
@@ -65,7 +65,7 @@ sudo chmod -R 755 "$TARGET_DIR"
 
 # Configure Apache for CGI and PHP
 CGI_CONFIG="<IfModule alias_module>
-    ScriptAlias /cgi-bin/ \"$TARGET_DIR/cgi-bin/\"
+    ScriptAlias /cgi-bin/ \"$TARGET_DIR/\"
 </IfModule>
 
 <Directory \"$TARGET_DIR\">
@@ -103,6 +103,6 @@ CREATE TABLE IF NOT EXISTS users (
 );"
 
 # Make fetch_services.py executable
-sudo chmod +x "$TARGET_DIR/cgi-bin/fetch_services.py"
+sudo chmod +x "$TARGET_DIR/fetch_services.py"
 
 echo "Installation completed. Open your web browser and navigate to http://<your-server-ip>/tmd-tvc/"
