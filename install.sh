@@ -47,8 +47,14 @@ if [ ! -d "$TARGET_DIR" ]; then
 fi
 
 # Copy project files
-sudo cp -r web/* "$TARGET_DIR/"
-sudo cp -r cgi-bin "$TARGET_DIR/"
+sudo cp -r css "$TARGET_DIR/"
+sudo cp -r js "$TARGET_DIR/"
+sudo cp services.php "$TARGET_DIR/"
+sudo cp login.php "$TARGET_DIR/"
+sudo cp register.php "$TARGET_DIR/"
+sudo cp create_service.php "$TARGET_DIR/"
+sudo cp config.php "$TARGET_DIR/"
+sudo cp fetch_services.py "$TARGET_DIR/cgi-bin/"
 
 # Set permissions
 sudo chown -R www-data:www-data "$TARGET_DIR"
@@ -56,7 +62,7 @@ sudo chmod -R 755 "$TARGET_DIR"
 
 # Configure Apache for CGI and PHP
 CGI_CONFIG="<IfModule alias_module>
-    ScriptAlias /cgi-bin/ \"$TARGET_DIR/\"
+    ScriptAlias /cgi-bin/ \"$TARGET_DIR/cgi-bin/\"
 </IfModule>
 
 <Directory \"$TARGET_DIR\">
