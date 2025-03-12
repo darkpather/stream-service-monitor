@@ -7,6 +7,10 @@ DB_NAME="stream_service_monitor"
 DB_USER="monitor_user"
 DB_PASS="password"
 
+# Prompt for MySQL root password
+echo "Enter MySQL root password:"
+read -s MYSQL_ROOT_PASS
+
 # Detect the operating system
 if [ -f /etc/os-release ]; then
     . /etc/os-release
@@ -52,7 +56,6 @@ sudo cp -r js "$TARGET_DIR/"
 sudo cp services.php "$TARGET_DIR/"
 sudo cp login.php "$TARGET_DIR/"
 sudo cp register.php "$TARGET_DIR/"
-sudo cp create_service.php "$TARGET_DIR/"
 sudo cp config.php "$TARGET_DIR/"
 sudo cp fetch_services.py "$TARGET_DIR/cgi-bin/"
 
@@ -86,13 +89,13 @@ elif [ "$OS" == "rhel" ] || [ "$OS" == "centos" ]; then
 fi
 
 # Set up MySQL database
-sudo mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
-sudo mysql -e "CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
-sudo mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';"
-sudo mysql -e "FLUSH PRIVILEGES;"
+mysql -u root -p"$MYSQL_ROOT_PASS" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+mysql -u root -p"$MYSQL_ROOT_PASS" -e "CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
+mysql -u root -p"$MYSQL_ROOT_PASS" -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';"
+mysql -u root -p"$MYSQL_ROOT_PASS" -e "FLUSH PRIVILEGES;"
 
 # Create users table
-sudo mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "
+mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
