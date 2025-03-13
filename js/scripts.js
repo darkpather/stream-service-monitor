@@ -1,6 +1,6 @@
 async function fetchServices() {
     try {
-        const response = await fetch('/cgi-bin/fetch_services.py');
+        const response = await fetch('/tmd-tvc/fetch_services.py');
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         populateTable(data.services);
@@ -39,7 +39,7 @@ function populateTable(services) {
 
 async function performAction(service, action) {
     try {
-        const response = await fetch(`/cgi-bin/fetch_services.py?action=${action}&service=${service}`);
+        const response = await fetch(`/tmd-tvc/fetch_services.py?action=${action}&service=${service}`);
         if (!response.ok) throw new Error('Network response was not ok');
         const result = await response.json();
         if (result.success) {
