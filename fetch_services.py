@@ -3,9 +3,11 @@ import os
 import subprocess
 import json
 import re
-from cgi import FieldStorage
 import psutil
 import logging
+import cgi
+form = cgi.FieldStorage()
+
 
 LOG_FILE = "/var/log/fetch_services.log"
 
@@ -15,7 +17,7 @@ logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %
 def get_services():
     services = []
     for file in os.listdir('/etc/systemd/system'):
-        if file.startswith('FFMPEG') and file.endswith('.service'):
+        if (file.startswith('FFMPEG') or file.startswith('SRT')) and file.endswith('.service'):
             name = file.replace('.service', '')
             status = get_service_status(name)
             cpu, memory = get_service_usage(name)
@@ -95,7 +97,7 @@ def perform_action(service, action):
 
 def main():
     print("Content-Type: application/json\n")
-    form = FieldStorage()
+    form = cgi.FieldStorage()
     action = form.getvalue("action")
     service = form.getvalue("service")
 
