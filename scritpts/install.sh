@@ -23,14 +23,14 @@ fi
 # Update and install necessary packages based on the OS
 if [ "$OS" == "ubuntu" ]; then
     sudo apt-get update
-    sudo apt-get install -y apache2 libapache2-mod-php php php-mysql ffmpeg python3 python3-pip mysql-server
+    sudo apt-get install -y apache2 libapache2-mod-php php php-mysql ffmpeg python3 python3-pip python3-psutil mysql-server
     sudo a2enmod cgi
     sudo systemctl enable apache2
     sudo systemctl start apache2
 
 elif [ "$OS" == "rhel" ] || [ "$OS" == "centos" ]; then
     sudo yum update -y
-    sudo yum install -y httpd mod_php php php-mysqlnd ffmpeg python3 python3-pip mariadb-server
+    sudo yum install -y httpd mod_php php php-mysqlnd ffmpeg python3 python3-pip python3-psutil mariadb-server
     sudo systemctl enable mariadb
     sudo systemctl start mariadb
     sudo systemctl enable httpd
@@ -43,7 +43,11 @@ else
 fi
 
 # Install psutil
-sudo pip3 install psutil
+if [ "$OS" == "ubuntu" ]; then
+    sudo apt install python3-psutil
+
+elif [ "$OS" == "rhel" ] || [ "$OS" == "centos" ]; then
+      sudo dnf install python3-psutil
 
 # Create target directory
 if [ ! -d "$TARGET_DIR" ]; then
